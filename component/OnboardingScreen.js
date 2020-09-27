@@ -100,13 +100,13 @@ export default function OnboardingScreen(props) {
 
   const content = props.pages[page];
   const allPages = Object.keys(props.pages);
-  const showSkip = content.hasOwnProperty('showSkip') ? content.showSkip : false;
-  const topBarRightText = content.hasOwnProperty('topBarRightText') ? content.topBarRightText : 'Skip';
-  const centerImage = content.hasOwnProperty('image') ? content.image : require('../assets/Placeholder.png');
-  const bodyText = content.hasOwnProperty('bodyText') ? content.bodyText : '';
-  const headerText = content.hasOwnProperty('headerText') ? content.headerText : '';
-  const bottomContent = content.hasOwnProperty('bottomContent') ? content.bottomContent : null;
-  const arrowTopRight = content.hasOwnProperty('arrowTopRight') ? content.arrowTopRight : require('../assets/ArrowRight.png')
+  const showSkip = !!content.showSkip || false;
+  const topBarRightText = content.topBarRightText || 'Skip';
+  const centerImage = content.image || require('../assets/Placeholder.png');
+  const bodyText = content.bodyText || '';
+  const headerText = content.headerText || '';
+  const bottomContent = content.bottomContent || null;
+  const arrowTopRight = content.arrowTopRight || require('../assets/ArrowRight.png')
 
   return (
     <Container style={[props.containerStyle]}>
