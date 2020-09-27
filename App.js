@@ -1,13 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import styled from 'styled-components';
+
+const Container = styled(SafeAreaView)`
+  flex: 1;
+  background-color: #fff;
+`;
+
+const RegularText = styled.Text`
+   color: #757E90;
+   font-size: 14px;
+   font-style: normal;
+   font-weight: 600;
+   line-height: 21px;
+`;
+
+const Button = styled.TouchableOpacity`
+  border-radius: 8px;
+  background: #F58F99;
+  box-shadow: 0px 5px 5px rgba(244, 143, 153, 0.15);
+`;
 
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Container>
+      <RegularText>
+        RN-Onboaring Example
+      </RegularText>
+    </Container>
   );
 }
 
