@@ -1,26 +1,13 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "name": "rn-onboarding",
-  "keywords": ["react-native", "onboarding", "first page", "welcome"],
-  "version": "1.0.1",
+  "keywords": ["react-native", "onboarding", "first page", "welcome screen"],
+  "version": "1.0.2",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "expo": "~39.0.2",
-    "expo-status-bar": "~1.0.2",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
-    "react-native-web": "~0.13.12",
-    "styled-components": "^5.2.0"
-  },
-  "devDependencies": {
-    "@babel/core": "~7.9.0"
-  },
-  "private": false
+  "dependencies": {},
+  "devDependencies": {},
+  "private": false,
+  "license": "MIT"
 }
