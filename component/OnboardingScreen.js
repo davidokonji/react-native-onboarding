@@ -1,64 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
-import styled from 'styled-components';
-
-const Container = styled(SafeAreaView)`
-  flex: 1;
-  background-color: #fff;
-`;
-
-const TopBar = styled.View`
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: 20.58px;
-  padding-top: 20px;
-`;
-
-const RegularText = styled.Text`
-   color: #757E90;
-   font-size: 14px;
-   font-style: normal;
-   font-weight: 600;
-   line-height: 21px;
-`;
-
-const HeaderText = styled.Text`
-  color: #000;
-  font-weight: 600;
-  line-height: 40px
-  font-size: 22px;
-`;
-
-
-const Body = styled.View`
-  flex: 2;
-  align-items: center;
-  justify-content: center
-`;
-
-const Circle = styled.TouchableOpacity`
-  width: 8px;
-  height: 8px;
-  background-color: ${ props => props.active ? props.activeColor : props.inActiveColor};
-  border-radius: 50px;
-  margin-left: 2.5px;
-  margin-right: 2.5px;
-`;
-
-const CircleContainer = styled.View`
-  margin-top: 30px;
-  flex-direction: row;
-`;
-
-const CenterImage = styled.Image`
-  margin-bottom: 25px
-`;
-
-const ArrowLeftImage = styled.Image`
-  margin-left: 5px;
-`;
+import { StyleSheet, SafeAreaView, View, Image, TouchableOpacity, Text } from 'react-native';
 
 export default function OnboardingScreen(props) {
   const [page, setPage] = useState(props.firstPageKey);
@@ -109,47 +51,51 @@ export default function OnboardingScreen(props) {
   const arrowTopRight = content.arrowTopRight || require('../assets/ArrowRight.png')
 
   return (
-    <Container style={[props.containerStyle]}>
-      <TopBar style={props.topBarStyle}>
+    <SafeAreaView style={[ styles.container, props.containerStyle]}>
+      <View style={[styles.topBar, props.topBarStyle]}>
         { (showSkip && !props.customTopBar) &&
           <>
-          <TouchableOpacity onPress={changePage}>
-            <RegularText style={props.topBarRightTextStyle}>
-              {topBarRightText}
-            </RegularText>
-          </TouchableOpacity>
-          <ArrowLeftImage source={arrowTopRight} style={[props.arrowTopRightStyle]} />
+            <TouchableOpacity onPress={changePage}>
+              <Text style={[styles.regularText, props.topBarRightTextStyle]}>
+                {topBarRightText}
+              </Text>
+            </TouchableOpacity>
+            <Image source={arrowTopRight} style={[{ marginLeft: 5 } ,props.arrowTopRightStyle]} />
           </>
         }
         {
           (!showSkip && props.customTopBar) && props.customTopBar
         }
-      </TopBar>
-      <Body style={props.bodyStyle}>
-        <CenterImage source={centerImage} style={[props.centerImageStyle]} />
-        <HeaderText style={props.titleStyle}>
+      </View>
+      <View style={[styles.body, props.bodyStyle]}>
+        <Image source={centerImage} style={[{marginBottom: 25}, props.centerImageStyle]} />
+        <Text style={[styles.headerText, props.titleStyle]}>
           {headerText}
-        </HeaderText>
-        <RegularText style={[styles.bodyText, props.bodyStyle]}>
+        </Text>
+        <Text style={[styles.regularText, styles.bodyText, props.bodyStyle]}>
           {bodyText}
-        </RegularText>
-        <CircleContainer style={props.circleContainerStyle}>
+        </Text>
+        <View style={[styles.circleContainer, props.circleContainerStyle]}>
         {
           allPages.map((value, i) =>
-            <Circle 
+            <TouchableOpacity 
               active={value == page}
               key={i}
               onPress={() => onCirclePress(value)}
-              style={props.circleStyle}
-              activeColor={props.activeCircleColor}
-              inActiveColor={props.inActiveCircleColor}
+              style={[
+                styles.circle,
+                (value == page) 
+                ? { backgroundColor: props.activeCircleColor } 
+                : { backgroundColor: props.inActiveCircleColor}, 
+                props.circleStyle
+              ]}
             />
           )
         }
-        </CircleContainer>
+        </View>
         {bottomContent}
-      </Body>
-    </Container>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -171,8 +117,48 @@ OnboardingScreen.defaultProps = {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  body: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   bodyText: {
     textAlign: 'center',
     width: '70%'
   },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingRight: 20.58,
+    paddingTop: 20,
+  },
+  regularText: {
+    color: '#757E90',
+    fontSize: 14,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 21,
+  },
+  headerText: {
+    color: '#000',
+    fontWeight: '600',
+    lineHeight: 40,
+    fontSize: 22
+  },
+  circle: {
+    width: 8,
+    height: 8,
+    backgroundColor: '#000',
+    borderRadius: 50,
+    marginHorizontal: 2.5
+  },
+  circleContainer: {
+    marginTop: 30,
+    flexDirection: 'row'
+  }
 });
