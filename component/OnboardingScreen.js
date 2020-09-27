@@ -84,12 +84,17 @@ export default function OnboardingScreen(props) {
       setPage(value);
     }
   }
-  
+
+  if (!props.pages) {
+    return null;
+  }
+
+    
   if (!props.firstPageKey) {
     return null;
   }
-  
-  if (!props.pages) {
+
+  if (!Object.keys(props.pages).includes(props.firstPageKey)) {
     return null;
   }
 
