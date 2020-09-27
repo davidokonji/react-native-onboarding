@@ -133,7 +133,7 @@ export default function OnboardingScreen(props) {
         <RegularText style={[styles.bodyText, props.bodyStyle]}>
           {bodyText}
         </RegularText>
-        <CircleContainer style={props.circleContainer}>
+        <CircleContainer style={props.circleContainerStyle}>
         {
           allPages.map((value, i) =>
             <Circle 
@@ -161,11 +161,10 @@ OnboardingScreen.defaultProps = {
   arrowTopRightStyle: {},
   centerImageStyle: {},
   titleStyle: {},
-  bodyStyle: {},
   circleStyle: {},
   topBarRightTextStyle: {},
   activeCircleColor: '#F58F99',
-  circleContainer: {},
+  circleContainerStyle: {},
   inActiveCircleColor: 'rgba(38, 0, 87, 0.2)',
   customTopBar: null,
   firstPageKey: null
