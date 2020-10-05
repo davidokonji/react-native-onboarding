@@ -43,6 +43,7 @@ or
     );
   }
 ```
+> [example code](/component/example/Sample.js)
 
 ## Component Props
 
@@ -63,6 +64,8 @@ or
 | circleContainer | false | {} |
 | inActiveCircleColor | false | ```rgba(38, 0, 87, 0.2)``` |
 | customTopBar | false | ```React.Component``` |
+| onPressNext | false | null
+| onPageChange | false | () => {} | returns the current page displayed
 
 ## Author
 

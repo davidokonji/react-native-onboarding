@@ -4,12 +4,19 @@
   "keywords": ["react-native", "onboarding", "first page", "welcome screen"],
   "version": "1.0.2",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:serve": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject"
   },
   "dependencies": {
-    "react-native-swipe-gestures": "https://github.com/glepur/react-native-swipe-gestures.git"
+    "react-native-swipe-gestures": "react-native-swipe-gestures"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "~7.9.0"
+  },
   "private": false,
   "license": "MIT",
   "repository": {

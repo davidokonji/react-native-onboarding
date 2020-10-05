@@ -25,6 +25,8 @@ export default function OnboardingScreen(props) {
         nextPage: (value) => {
           if (Object.keys(props.pages).includes(value)) {
             setPage(value);
+          } else {
+            console.warn('Next page value need to be a page key');
           }
         },
       });
@@ -55,9 +57,9 @@ export default function OnboardingScreen(props) {
     return null;
   }
 
-  const handleSwipe = () => {
+  const handleSwipe = (direction) => {
     const {SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-    if (SWIPE_LEFT) {
+    if (direction == SWIPE_RIGHT) {
       if (page != props.firstPageKey) {
         const currentIndex = allPages.findIndex(value => value == page);
         if (currentIndex != allPages.length) {
@@ -66,10 +68,11 @@ export default function OnboardingScreen(props) {
       }
     }
 
-    if (SWIPE_RIGHT) {
+    if (direction == SWIPE_LEFT) {
       const currentIndex = allPages.findIndex(value => value == page);
-      if (currentIndex != allPages.length) {
-        setPage(allPages[currentIndex + 1]);
+      const next = allPages[currentIndex + 1];
+      if (currentIndex != allPages.length && next) {
+        setPage(next);
       }
     }
   }
@@ -77,7 +80,7 @@ export default function OnboardingScreen(props) {
   const content = props.pages[page];
   const allPages = Object.keys(props.pages);
   const showSkip = !!content.showSkip || false;
-  const topBarRightText = content.topBarRightText || 'Skip';
+  const topBarRightText = content.topBarRightText || 'Next';
   const centerImage = content.image || require('../assets/Placeholder.png');
   const bodyText = content.bodyText || '';
   const headerText = content.headerText || '';
@@ -91,9 +94,9 @@ export default function OnboardingScreen(props) {
 
   return (
     <GestureRecognizer
-    onSwipe={(direction, state) => handleSwipe(direction, state)}
-    config={config}
-    style={{ flex: 1 }}
+      onSwipe={(direction, state) => handleSwipe(direction, state)}
+      config={config}
+      style={{ flex: 1 }}
     >
       <SafeAreaView style={[ styles.container, props.containerStyle]}>
         <View style={[styles.topBar, props.topBarStyle]}>
@@ -160,7 +163,7 @@ OnboardingScreen.defaultProps = {
   customTopBar: null,
   firstPageKey: null,
   onPressNext: null,
-  onPageChange: null,
+  onPageChange: () => {},
 }
 
 const styles = StyleSheet.create({
