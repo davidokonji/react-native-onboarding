@@ -1,12 +1,6 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
-import styled from 'styled-components';
 import OnboardingScreen from '../OnboardingScreen';
-
-const Container = styled(SafeAreaView)`
-  flex: 1;
-  background-color: #fff;
-`;
 
 export default function Sample() {
   const pages = {
@@ -34,9 +28,19 @@ export default function Sample() {
   };
 
   return (
-    <Container>
-      <OnboardingScreen pages={pages} firstPageKey={'first'} />
-    </Container>
+    <SafeAreaView style={{ flex: 1}}>
+      <OnboardingScreen 
+        pages={pages}
+        firstPageKey={'first'}
+        onPressNext={({ nextPage }) => {
+          nextPage('third');
+        }}
+        onPageChange={(page) => {
+          // console.log(page);
+          // handle logic with current page
+        }}
+      />
+    </SafeAreaView>
   );
 }
 

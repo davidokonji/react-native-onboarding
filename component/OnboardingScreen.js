@@ -1,6 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { StyleSheet, SafeAreaView, View, Image, TouchableOpacity, Text } from 'react-native';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 export default function OnboardingScreen(props) {
   const [page, setPage] = useState(props.firstPageKey);
@@ -14,10 +15,26 @@ export default function OnboardingScreen(props) {
     }
   }, []);
 
+  useMemo(() => {
+    props.onPageChange(page)
+  }, [page, setPage]);
+
   const changePage = () => {
-    const currentIndex = allPages.findIndex(value => value == page);
-    if (currentIndex != allPages.length) {
-      setPage(allPages[currentIndex + 1]);
+    if (props.onPressNext) {
+      props.onPressNext({
+        nextPage: (value) => {
+          if (Object.keys(props.pages).includes(value)) {
+            setPage(value);
+          } else {
+            console.warn('Next page value need to be a page key');
+          }
+        },
+      });
+    } else {
+      const currentIndex = allPages.findIndex(value => value == page);
+      if (currentIndex != allPages.length) {
+        setPage(allPages[currentIndex + 1]);
+      }
     }
   }
 
@@ -40,62 +57,93 @@ export default function OnboardingScreen(props) {
     return null;
   }
 
+  const handleSwipe = (direction) => {
+    const {SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+    if (direction == SWIPE_RIGHT) {
+      if (page != props.firstPageKey) {
+        const currentIndex = allPages.findIndex(value => value == page);
+        if (currentIndex != allPages.length) {
+          setPage(allPages[currentIndex - 1]);
+        }
+      }
+    }
+
+    if (direction == SWIPE_LEFT) {
+      const currentIndex = allPages.findIndex(value => value == page);
+      const next = allPages[currentIndex + 1];
+      if (currentIndex != allPages.length && next) {
+        setPage(next);
+      }
+    }
+  }
+
   const content = props.pages[page];
   const allPages = Object.keys(props.pages);
   const showSkip = !!content.showSkip || false;
-  const topBarRightText = content.topBarRightText || 'Skip';
+  const topBarRightText = content.topBarRightText || 'Next';
   const centerImage = content.image || require('../assets/Placeholder.png');
   const bodyText = content.bodyText || '';
   const headerText = content.headerText || '';
   const bottomContent = content.bottomContent || null;
-  const arrowTopRight = content.arrowTopRight || require('../assets/ArrowRight.png')
+  const arrowTopRight = content.arrowTopRight || require('../assets/ArrowRight.png');
+
+  const config = {
+    velocityThreshold: 0.3,
+    directionalOffsetThreshold: 80
+  };
 
   return (
-    <SafeAreaView style={[ styles.container, props.containerStyle]}>
-      <View style={[styles.topBar, props.topBarStyle]}>
-        { (showSkip && !props.customTopBar) &&
-          <>
-            <TouchableOpacity onPress={changePage}>
-              <Text style={[styles.regularText, props.topBarRightTextStyle]}>
-                {topBarRightText}
-              </Text>
-            </TouchableOpacity>
-            <Image source={arrowTopRight} style={[{ marginLeft: 5 } ,props.arrowTopRightStyle]} />
-          </>
-        }
-        {
-          (!showSkip && props.customTopBar) && props.customTopBar
-        }
-      </View>
-      <View style={[styles.body, props.bodyStyle]}>
-        <Image source={centerImage} style={[{marginBottom: 25}, props.centerImageStyle]} />
-        <Text style={[styles.headerText, props.titleStyle]}>
-          {headerText}
-        </Text>
-        <Text style={[styles.regularText, styles.bodyText, props.bodyStyle]}>
-          {bodyText}
-        </Text>
-        <View style={[styles.circleContainer, props.circleContainerStyle]}>
-        {
-          allPages.map((value, i) =>
-            <TouchableOpacity 
-              active={value == page}
-              key={i}
-              onPress={() => onCirclePress(value)}
-              style={[
-                styles.circle,
-                (value == page) 
-                ? { backgroundColor: props.activeCircleColor } 
-                : { backgroundColor: props.inActiveCircleColor}, 
-                props.circleStyle
-              ]}
-            />
-          )
-        }
+    <GestureRecognizer
+      onSwipe={(direction, state) => handleSwipe(direction, state)}
+      config={config}
+      style={{ flex: 1 }}
+    >
+      <SafeAreaView style={[ styles.container, props.containerStyle]}>
+        <View style={[styles.topBar, props.topBarStyle]}>
+          { (showSkip && !props.customTopBar) &&
+            <>
+              <TouchableOpacity onPress={changePage}>
+                <Text style={[styles.regularText, props.topBarRightTextStyle]}>
+                  {topBarRightText}
+                </Text>
+              </TouchableOpacity>
+              <Image source={arrowTopRight} style={[{ marginLeft: 5 } ,props.arrowTopRightStyle]} />
+            </>
+          }
+          {
+            (!showSkip && props.customTopBar) && props.customTopBar
+          }
         </View>
-        {bottomContent}
-      </View>
-    </SafeAreaView>
+        <View style={[styles.body, props.bodyStyle]}>
+          <Image source={centerImage} style={[{marginBottom: 25}, props.centerImageStyle]} />
+          <Text style={[styles.headerText, props.titleStyle]}>
+            {headerText}
+          </Text>
+          <Text style={[styles.regularText, styles.bodyText, props.bodyStyle]}>
+            {bodyText}
+          </Text>
+          <View style={[styles.circleContainer, props.circleContainerStyle]}>
+          {
+            allPages.map((value, i) =>
+              <TouchableOpacity 
+                active={value == page}
+                key={i}
+                onPress={() => onCirclePress(value)}
+                style={[
+                  styles.circle,
+                  (value == page) 
+                  ? { backgroundColor: props.activeCircleColor } 
+                  : { backgroundColor: props.inActiveCircleColor}, 
+                  props.circleStyle
+                ]}
+              />
+            )
+          }
+          </View>
+          {bottomContent}
+        </View>
+      </SafeAreaView>
+    </GestureRecognizer>
   );
 }
 
@@ -113,7 +161,9 @@ OnboardingScreen.defaultProps = {
   circleContainerStyle: {},
   inActiveCircleColor: 'rgba(38, 0, 87, 0.2)',
   customTopBar: null,
-  firstPageKey: null
+  firstPageKey: null,
+  onPressNext: null,
+  onPageChange: () => {},
 }
 
 const styles = StyleSheet.create({

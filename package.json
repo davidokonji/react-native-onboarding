@@ -2,12 +2,28 @@
   "main": "index.js",
   "name": "rn-onboarding",
   "keywords": ["react-native", "onboarding", "first page", "welcome screen"],
-  "version": "1.0.2",
+  "version": "1.0.4",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:serve": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "react-native-swipe-gestures": "1.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "~7.9.0"
+  },
   "private": false,
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url": "git://github.com/davidokonji/react-native-onboarding.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.com"
+  }
 }
